@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spyware Detection Test</title>
+    <style>
+        /* Add some basic styling for better presentation */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: black;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 66px;
+            font-weight: bold;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 10px;
+        }
+
+        label {
+            grid-column: span 2;
+        }
+
+        button {
+            grid-column: span 2;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spyware Detection Test</h1>
+
+    <form id="spywareForm" action="/predict-file" method="post" enctype="multipart/form-data">
+        <label for="fileInput">Choose an executable file (.exe):</label>
+        <input type="file" id="fileInput" name="file" accept=".exe" required>
+
+        <button type="submit">Predict Spyware</button>
+    </form>
+
+    <h2>Prediction Result:</h2>
+    <p id="predictionResult"></p>
+
+    <script>
+        // You can add JavaScript here to handle the response and update the UI
+        document.getElementById('spywareForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                fetch('/predict-file', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Display prediction result
+                    document.getElementById('predictionResult').innerText = 'Prediction: ' + (data.is_spyware ? 'Spyware Detected' : 'Not Spyware');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
